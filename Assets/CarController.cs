@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public class CarController : MonoBehaviour
-{
-
-    private float horizontalInput; // keys a and d 
-    private float verticalInput; // keys w and s
+public class CarController : MonoBehaviour {
+    private float horizontalInput;
+    private float verticalInput;
     private float steeringAngle;
     private float brakeInput;
 
@@ -13,7 +11,7 @@ public class CarController : MonoBehaviour
     public Transform frontWheelLeftTransform, frontWheelRightTransform;
     public Transform rearWheelLeftTransform, rearWheelRightTransform;
     public Rigidbody rb;
-    public float maxSteeringAngle = 30; // the speed to steering
+    public float maxSteeringAngle = 30;
     public float maxEnginePower = 90;
     public float brakeForce = 90000;
     public float currentBrakeForce;
@@ -21,46 +19,22 @@ public class CarController : MonoBehaviour
     public void GetInput() {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-        //brakeInput = Input.GetKey(KeyCode.Space);
         brakeInput = Input.GetAxis("Jump");
     }
 
     private void Steer() {
         steeringAngle = maxSteeringAngle * horizontalInput;
-        frontWheelLeft.steerAngle = steeringAngle;
-        frontWheelRight.steerAngle = steeringAngle;
+        frontWheelLeft.steerAngle = frontWheelRight.steerAngle  = steeringAngle;
     }
 
     private void Accelerate() {
-
-        //Debug.Log(rearWheelLeft.motorTorque);
-        Debug.Log(brakeInput);
-        //Debug.Log(verticalInput);
-        //if (verticalInput > 0.01) {
-        //    brakeInput = false;
-        //}
-        if (brakeInput == 1)
-        {
-            //Debug.Log("Spacebar was pressed");
+        if (brakeInput == 1) {
             currentBrakeForce = brakeForce;
-            rearWheelLeft.brakeTorque = currentBrakeForce;
-            rearWheelRight.brakeTorque = currentBrakeForce;
-
-            rearWheelLeft.motorTorque = 1;
-            rearWheelRight.motorTorque = 1;
-
-
-            Debug.Log(rearWheelLeft.motorTorque);
-        }
-        else
-        {
-            rearWheelLeft.brakeTorque = 0;
-            rearWheelRight.brakeTorque = 0;
-
-            rearWheelLeft.motorTorque = verticalInput * maxEnginePower;
-            rearWheelRight.motorTorque = verticalInput * maxEnginePower;
-            //brakeInput = false;
-            currentBrakeForce = 0f;
+            rearWheelLeft.brakeTorque = rearWheelRight.brakeTorque = currentBrakeForce;
+            rearWheelLeft.motorTorque = rearWheelRight.motorTorque = 1;
+        } else {
+            rearWheelLeft.brakeTorque = rearWheelRight.brakeTorque = 0;
+            rearWheelLeft.motorTorque = rearWheelRight.motorTorque = verticalInput * maxEnginePower;
         }
     }
 
@@ -77,14 +51,13 @@ public class CarController : MonoBehaviour
 
         _collider.GetWorldPose(out _pos, out _quat);
         _transform.position = _pos;
-        _transform.rotation = _quat; 
+        _transform.rotation = _quat;
     }
 
     private void FixedUpdate() {
         GetInput();
         Steer();
         Accelerate();
-        //Brake();
         UpdateWheelPositions();
     }
 }
