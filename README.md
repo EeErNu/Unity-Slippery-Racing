@@ -7,12 +7,8 @@
 ## Current progress:
 ### Car
 * Car can drive forwards / backwards (w, s or arrow up / down). 
-* Car can make lef / right turns (a, d or arrow left / right).
+* Car can make left / right turns (a, d or arrow left / right).
 * Car can use handbrake (spacebar).
 
 ### Track
 * It is possible to drive on track.
-
-
-
-
